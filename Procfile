@@ -1,1 +1,1 @@
-web: java -jar target/dictionary-bot.jar
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar target/dictionary-bot.jar
