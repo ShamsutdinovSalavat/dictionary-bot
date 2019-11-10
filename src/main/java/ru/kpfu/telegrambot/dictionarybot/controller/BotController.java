@@ -1,9 +1,8 @@
 package ru.kpfu.telegrambot.dictionarybot.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.telegrambot.dictionarybot.exception.IncorrectMessageException;
@@ -18,8 +17,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping(
 		path = "/telegram/webhook",
-		consumes = MediaType.APPLICATION_JSON_VALUE,
-		produces = MediaType.APPLICATION_JSON_VALUE
+		consumes = "application/json"
 )
 public class BotController {
 
@@ -30,7 +28,7 @@ public class BotController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TelegramResponse> update(Update update) throws RestException {
+	public ResponseEntity<TelegramResponse> update(@RequestBody Update update) throws RestException {
 
 		if (Objects.isNull(update)) {
 			throw new RestException("Update is null");
