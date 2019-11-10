@@ -1,12 +1,12 @@
 package ru.kpfu.telegrambot.dictionarybot.service;
 
 import org.springframework.stereotype.Service;
+import ru.kpfu.telegrambot.dictionarybot.exception.IncorrectMessageException;
 import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Message;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.MethodBuilder;
-import ru.kpfu.telegrambot.dictionarybot.exception.IncorrectMessageException;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 
 import java.util.regex.Pattern;
@@ -38,7 +38,7 @@ public class TelegramBotService implements BotService {
 	}
 
 	private boolean isCorrectWord(String word) {
-		return Pattern.compile("[a-z\\S]+").matcher(word).matches();
+		return Pattern.compile("\\w+").matcher(word).matches();
 	}
 
 	@Override

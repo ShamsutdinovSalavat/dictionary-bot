@@ -9,3 +9,4 @@ Features:
     
 Issues:
 1) Get http 500 when telegram send update object
+2) Regexp pattern is't correct 
