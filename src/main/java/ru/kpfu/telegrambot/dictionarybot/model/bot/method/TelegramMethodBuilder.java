@@ -1,6 +1,6 @@
 package ru.kpfu.telegrambot.dictionarybot.model.bot.method;
 
-public class MethodBuilder {
+public class TelegramMethodBuilder {
 
 	public static SendMessageMethod.SendMessageMethodBuilder sendMessage() {
 		return new SendMessageMethod.SendMessageMethodBuilder();

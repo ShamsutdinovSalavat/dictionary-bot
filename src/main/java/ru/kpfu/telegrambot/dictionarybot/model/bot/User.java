@@ -3,6 +3,8 @@ package ru.kpfu.telegrambot.dictionarybot.model.bot;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import java.util.Objects;
+
 @JsonRootName("from")
 public class User {
 
@@ -68,5 +70,23 @@ public class User {
 
 	public void setLanguageCode(String languageCode) {
 		this.languageCode = languageCode;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof User)) return false;
+		User user = (User) o;
+		return isBot == user.isBot &&
+				Objects.equals(id, user.id) &&
+				Objects.equals(firstName, user.firstName) &&
+				Objects.equals(lastName, user.lastName) &&
+				Objects.equals(username, user.username) &&
+				Objects.equals(languageCode, user.languageCode);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, isBot, firstName, lastName, username, languageCode);
 	}
 }
