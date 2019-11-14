@@ -1,15 +1,12 @@
 package ru.kpfu.telegrambot.dictionarybot;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.kpfu.telegrambot.dictionarybot.exception.IncorrectMessageException;
-import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Chat;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Message;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
@@ -18,14 +15,21 @@ import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 import ru.kpfu.telegrambot.dictionarybot.service.DictionaryService;
 import ru.kpfu.telegrambot.dictionarybot.service.TelegramBotService;
 
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TelegramBotServiceTest {
 
-	private Update update;
+	private Update update = new Update();
+
+	@Mock
+	private DictionaryService dictionaryService;
+
+	@InjectMocks
+	private TelegramBotService service;
 
 	@Before
 	public void before() {
-		update = new Update();
 		Message message = new Message();
 		Chat chat = new Chat();
 		chat.setId(1);
@@ -36,16 +40,17 @@ public class TelegramBotServiceTest {
 	}
 
 	@Test
-	void whenCorrectUpdate_thenReturnSendMessage() throws WordNotFoundException, IncorrectMessageException {
-		DictionaryResponse response = Mockito.mock(DictionaryResponse.class);
-		DictionaryService dictionaryService = Mockito.mock(DictionaryService.class);
-		Mockito.when(response.getDefinition()).thenReturn("unable to see");
-		Mockito.when(dictionaryService.getResponseWithDescription("blind")).thenReturn(response);
-
-		TelegramBotService service = new TelegramBotService(dictionaryService);
+	public void whenCorrectUpdate_thenReturnSendMessage() {
+		when(dictionaryService.getResponseWithDescription("blind"))
+				.thenReturn(new DictionaryResponse() {
+					@Override
+					public String getDefinition() {
+						return "unable to see";
+					}
+				});
 
 		SendMessageMethod telegramResponse = (SendMessageMethod) service.getResponse(update);
 
-		Assertions.assertEquals(response.getDefinition(), telegramResponse.getText());
+		Assertions.assertEquals("unable to see", telegramResponse.getText());
 	}
 }
