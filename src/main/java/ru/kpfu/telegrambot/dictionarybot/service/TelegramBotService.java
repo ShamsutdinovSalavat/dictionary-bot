@@ -1,12 +1,14 @@
 package ru.kpfu.telegrambot.dictionarybot.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.kpfu.telegrambot.dictionarybot.exception.IncorrectMessageException;
-import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
+import ru.kpfu.telegrambot.dictionarybot.model.TelegramMessage;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Message;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
-import ru.kpfu.telegrambot.dictionarybot.model.bot.method.MethodBuilder;
+import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 
 import java.util.regex.Pattern;
@@ -14,27 +16,28 @@ import java.util.regex.Pattern;
 @Service
 public class TelegramBotService implements BotService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(TelegramBotService.class);
+
+	@Autowired
 	private DictionaryService dictionaryService;
 
-	public TelegramBotService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
-
 	@Override
-	public TelegramResponse getResponse(Update update) throws IncorrectMessageException, WordNotFoundException {
+	public TelegramResponse getResponse(Update update) {
 		Message message = update.getMessage();
 		String word = message.getText().toLowerCase();
 
-		if (!isCorrectWord(word)) {
-			throw new IncorrectMessageException("Message's text is incorrect");
+		if (isCorrectWord(word)) {
+			DictionaryResponse dictionaryResponse = dictionaryService.getResponseWithDescription(word);
+			String definition = dictionaryResponse.getDefinition();
+
+			return TelegramMethodBuilder
+					.sendMessage()
+					.setChatId(message.getChat().getId())
+					.setText(definition == null ? TelegramMessage.INCORRECT_WORD_MESSAGE.value() : definition)
+					.build();
+		} else {
+			return getErrorResponse(update);
 		}
-
-		DictionaryResponse dictionaryResponse = dictionaryService.getResponseWithDescription(word);
-
-		return MethodBuilder.sendMessage()
-				.setChatId(message.getChat().getId())
-				.setText(dictionaryResponse.getDefinition())
-				.build();
 	}
 
 	private boolean isCorrectWord(String word) {
@@ -42,10 +45,11 @@ public class TelegramBotService implements BotService {
 	}
 
 	@Override
-	public TelegramResponse getErrorResponse() {
-		return MethodBuilder
+	public TelegramResponse getErrorResponse(Update update) {
+		return TelegramMethodBuilder
 				.sendMessage()
-				.setText("kachiwakawa")
+				.setChatId(update.getMessage().getChat().getId())
+				.setText(TelegramMessage.INCORRECT_WORD_MESSAGE.value())
 				.build();
 	}
 }

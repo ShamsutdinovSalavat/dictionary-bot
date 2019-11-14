@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kpfu.telegrambot.dictionarybot.exception.IncorrectMessageException;
 import ru.kpfu.telegrambot.dictionarybot.exception.RestException;
-import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
 import ru.kpfu.telegrambot.dictionarybot.service.BotService;
@@ -38,7 +36,7 @@ public class BotController {
 			TelegramResponse response = botService.getResponse(update);
 			return ResponseEntity.ok(response);
 
-		} catch (IncorrectMessageException | WordNotFoundException ex) {
+		} catch (Exception ex) {
 			throw new RestException(ex);
 		}
 	}
