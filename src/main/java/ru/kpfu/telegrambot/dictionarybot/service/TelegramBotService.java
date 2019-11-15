@@ -28,12 +28,12 @@ public class TelegramBotService implements BotService {
 
 		if (isCorrectWord(word)) {
 			DictionaryResponse dictionaryResponse = dictionaryService.getResponseWithDescription(word);
-			String definition = dictionaryResponse.getDefinition();
 
 			return TelegramMethodBuilder
 					.sendMessage()
 					.setChatId(message.getChat().getId())
-					.setText(definition == null ? TelegramMessage.INCORRECT_WORD_MESSAGE.value() : definition)
+					.setText(dictionaryResponse == null ?
+							TelegramMessage.INCORRECT_WORD_MESSAGE.value() : dictionaryResponse.getDefinition())
 					.build();
 		} else {
 			return getErrorResponse(update);

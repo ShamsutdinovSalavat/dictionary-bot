@@ -12,3 +12,4 @@ Issues:
 2) Regexp pattern is't correct 
 3) problem with doing requests via RestTemplate when app is deployed on heroku
 4) RestClientException don't handle properly
+5) NPE at TelegramBotService 
