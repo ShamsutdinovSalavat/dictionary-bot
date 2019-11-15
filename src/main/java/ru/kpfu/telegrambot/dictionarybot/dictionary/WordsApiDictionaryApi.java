@@ -4,8 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
@@ -32,6 +36,9 @@ public class WordsApiDictionaryApi implements DictionaryApi {
 		log.debug("MY KEY: {}", key);
 		headers.add("x-rapidapi-host", URL.replace("https://", ""));
 		headers.add("x-rapidapi-key", key);
+		headers.add("user-agent",
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " +
+						"Chrome/54.0.2840.99 Safari/537.36");
 	}
 
 
@@ -40,20 +47,20 @@ public class WordsApiDictionaryApi implements DictionaryApi {
 		HttpEntity<WordsApiResponse> httpEntity = new HttpEntity<>(headers);
 		log.debug("Performing request on {}, word = {}", WORDS_METHOD, word);
 
-		ResponseEntity<WordsApiResponse> response = restTemplate.exchange(
-				WORDS_METHOD,
-				HttpMethod.GET,
-				httpEntity,
-				WordsApiResponse.class,
-				word
-		);
+		try {
+			ResponseEntity<WordsApiResponse> response = restTemplate.exchange(
+					WORDS_METHOD,
+					HttpMethod.GET,
+					httpEntity,
+					WordsApiResponse.class,
+					word
+			);
 
-		log.debug("Response: HttpStatusCode = {}, body = {}", response.getStatusCode(), response.getBody());
+			log.debug("Response: HttpStatusCode = {}, body = {}", response.getStatusCode(), response.getBody());
 
-		if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-			throw new WordNotFoundException("Word was not found");
+			return response.getBody();
+		} catch (RestClientException e) {
+			throw new WordNotFoundException(e);
 		}
-
-		return response.getBody();
 	}
 }

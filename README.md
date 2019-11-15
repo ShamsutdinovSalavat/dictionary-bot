@@ -10,3 +10,5 @@ Features:
 Issues:
 1) Get http 500 when telegram send update object
 2) Regexp pattern is't correct 
+3) problem with doing requests via RestTemplate when app is deployed on heroku
+4) RestClientException don't handle properly
