@@ -23,7 +23,6 @@ public class WordsApiDictionaryApi implements DictionaryApi {
 	private static final String URL = "https://wordsapiv1.p.rapidapi.com";
 	private static final String WORDS_METHOD = URL + "/words/{word}";
 	private static final Logger log = LoggerFactory.getLogger(WordsApiDictionaryApi.class);
-
 	@Value("${wordsapi.key}")
 	private String key;
 
@@ -57,7 +56,6 @@ public class WordsApiDictionaryApi implements DictionaryApi {
 			);
 
 			log.debug("Response: HttpStatusCode = {}, body = {}", response.getStatusCode(), response.getBody());
-
 			return response.getBody();
 		} catch (RestClientException e) {
 			throw new WordNotFoundException(e);

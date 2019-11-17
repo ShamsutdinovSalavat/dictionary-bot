@@ -17,7 +17,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.dictionary.linguaRobot.LinguaRobo
 
 import javax.annotation.PostConstruct;
 
-@Component
+@Component("api1")
 public class LinguaRobotDictionaryApi implements DictionaryApi {
 
     private static final String URL = "https://api.linguarobot.io/language/v1/entries/en";
@@ -57,8 +57,12 @@ public class LinguaRobotDictionaryApi implements DictionaryApi {
             );
 
             log.debug("Response: HttpStatusCode = {}, body = {}", response.getStatusCode(), response.getBody());
+            LinguaRobotResponse respBody = response.getBody();
 
-            return response.getBody();
+            if(respBody.getEntry().isEmpty()){
+                throw new WordNotFoundException("the word is not found");
+            }
+            return respBody;
         } catch (RestClientException e) {
             throw new WordNotFoundException(e);
         }

@@ -19,7 +19,8 @@ public class LinguaRobotResponse extends DictionaryResponse {
 
     @Override
     public String getDefinition() {
-        return null;
+
+        return entry.get(0).getLexemes().get(0).getSenses().get(0).getDefinition();
     }
 
     @Override
