@@ -28,7 +28,7 @@ public class TelegramResponseServiceImpl implements TelegramResponseService {
 	public TelegramResponse getSlashCommandResponse(Integer chatId, String messageText) {
 		TelegramResponse response;
 
-		String slashCommand = messageText.toLowerCase().replace("/", "");
+		String slashCommand = messageText.toLowerCase().replace("/", "").toUpperCase();
 		if (isExist(slashCommand)) {
 			response = slashCommandFactory
 					.getSlashCommand(SlashCommand.valueOf(slashCommand))
