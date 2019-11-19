@@ -5,7 +5,7 @@ import ru.kpfu.telegrambot.dictionarybot.state.State;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "tg_user")
 public class User {
 
 	@Id
