@@ -1,5 +1,8 @@
 package ru.kpfu.telegrambot.dictionarybot.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.telegrambot.dictionarybot.exception.RestException;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
-import ru.kpfu.telegrambot.dictionarybot.service.BotService;
-
-import java.util.Objects;
+import ru.kpfu.telegrambot.dictionarybot.service.TelegramBotService;
 
 @RestController
 @RequestMapping(
@@ -19,21 +20,22 @@ import java.util.Objects;
 )
 public class BotController {
 
-	private BotService botService;
+	private static final Logger LOG = LoggerFactory.getLogger(BotController.class);
 
-	public BotController(BotService botService) {
-		this.botService = botService;
-	}
+	@Autowired
+	private TelegramBotService botService;
+
 
 	@PostMapping
 	public ResponseEntity<TelegramResponse> update(@RequestBody Update update) throws RestException {
+		LOG.debug("Incomming update: {}", update);
 
-		if (Objects.isNull(update)) {
+		if (update == null && update.getMessage().getText() == null) {
 			throw new RestException("Update is null");
 		}
 
 		try {
-			TelegramResponse response = botService.getResponse(update);
+			TelegramResponse response = botService.onUpdate(update);
 			return ResponseEntity.ok(response);
 
 		} catch (Exception ex) {

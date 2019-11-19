@@ -12,11 +12,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
-import ru.kpfu.telegrambot.dictionarybot.service.DictionaryServiceImpl;
+import ru.kpfu.telegrambot.dictionarybot.repository.UserRepository;
 import ru.kpfu.telegrambot.dictionarybot.service.TelegramBotService;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -29,7 +31,7 @@ public class BotControllerTest {
 	@MockBean
 	private TelegramBotService service;
 	@MockBean
-	private DictionaryServiceImpl dicService;
+	private UserRepository userRepository;
 
 	private String json;
 	private Update update;
@@ -52,7 +54,7 @@ public class BotControllerTest {
 				"            \"type\":\"private\"\n" +
 				"        },\n" +
 				"        \"date\":1509641174,\n" +
-				"        \"text\":\"eevee\"\n" +
+				"        \"message\":\"eevee\"\n" +
 				"    }\n" +
 				"}";
 		update = new ObjectMapper().readValue(json, Update.class);
@@ -60,7 +62,7 @@ public class BotControllerTest {
 
 	@Test
 	public void whenCorrectUpdate_thenHttpOk() throws Exception {
-		when(service.getResponse(update)).thenReturn(
+		when(service.onUpdate(update)).thenReturn(
 				TelegramMethodBuilder.sendMessage()
 						.setText("hello")
 						.build());
@@ -70,6 +72,18 @@ public class BotControllerTest {
 						post("/telegram/webhook")
 								.contentType("application/json")
 								.content(json))
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("hello")));
+	}
+
+	@Test()
+	public void whenNoMessage_thenHttpOkAndEmpty() throws Exception {
+		this.mockMvc
+				.perform(
+						post("/telegram/webhook")
+								.contentType("application/json")
+								.content("{\"update_id\": \"1\"}"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(""));
 	}
 }

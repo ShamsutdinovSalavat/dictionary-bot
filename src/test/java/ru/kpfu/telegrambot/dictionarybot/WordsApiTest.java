@@ -18,7 +18,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 public class WordsApiTest {
 
 	@Autowired
-	@Qualifier("api")
+	@Qualifier("wordsApi")
 	private WordsApiDictionaryApi api;
 
 	@Test

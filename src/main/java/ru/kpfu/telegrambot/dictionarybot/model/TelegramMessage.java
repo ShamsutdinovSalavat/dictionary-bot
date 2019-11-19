@@ -10,7 +10,7 @@ public enum TelegramMessage {
 		this.message = message;
 	}
 
-	public String value() {
+	public String message() {
 		return this.message;
 	}
 }
