@@ -17,7 +17,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.dictionary.wordsapi.WordsApiRespo
 
 import javax.annotation.PostConstruct;
 
-@Component("api")
+@Component("wordsApi")
 public class WordsApiDictionaryApi implements DictionaryApi {
 
 	private static final String URL = "https://wordsapiv1.p.rapidapi.com";
