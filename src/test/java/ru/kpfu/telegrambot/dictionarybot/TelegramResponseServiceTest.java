@@ -6,7 +6,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import ru.kpfu.telegrambot.dictionarybot.model.bot.command.StartSlashCommand;
+import ru.kpfu.telegrambot.dictionarybot.model.bot.command.SlashCommand;
+import ru.kpfu.telegrambot.dictionarybot.model.bot.command.TelegramSlashCommandFactory;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.SendMessageMethod;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.service.TelegramResponseServiceImpl;
@@ -20,6 +21,8 @@ public class TelegramResponseServiceTest {
 
 	@Mock
 	private StateFactory stateFactory;
+	@Mock
+	private TelegramSlashCommandFactory slashCommandFactory;
 
 	@InjectMocks
 	private TelegramResponseServiceImpl service;
@@ -41,11 +44,16 @@ public class TelegramResponseServiceTest {
 
 	@Test
 	public void whenSlashCommand_thenSlashCommandMessage() {
+		when(slashCommandFactory.getSlashCommand(SlashCommand.START))
+				.thenReturn((chatId) ->
+						TelegramMethodBuilder.sendMessage()
+								.setChatId(1)
+								.setText("hello")
+								.build());
+
 		SendMessageMethod response =
 				(SendMessageMethod) service.getSlashCommandResponse(1, "/start");
-		SendMessageMethod expected =
-				(SendMessageMethod) new StartSlashCommand().processCommand(1);
 
-		Assert.assertEquals(expected.getText(), response.getText());
+		Assert.assertEquals("hello", response.getText());
 	}
 }

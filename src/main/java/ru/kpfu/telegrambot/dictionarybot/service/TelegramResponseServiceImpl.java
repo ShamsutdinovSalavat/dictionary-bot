@@ -10,6 +10,8 @@ import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.state.State;
 import ru.kpfu.telegrambot.dictionarybot.state.StateFactory;
 
+import java.util.Arrays;
+
 
 @Service
 public class TelegramResponseServiceImpl implements TelegramResponseService {
@@ -47,11 +49,8 @@ public class TelegramResponseServiceImpl implements TelegramResponseService {
 	}
 
 	private boolean isExist(String slashCommand) {
-		try {
-			SlashCommand.valueOf(slashCommand);
-			return true;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
+		return Arrays.stream(SlashCommand.values())
+				.map(SlashCommand::name)
+				.anyMatch(slashCommand::equals);
 	}
 }
