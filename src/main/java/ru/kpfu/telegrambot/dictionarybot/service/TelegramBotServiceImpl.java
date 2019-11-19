@@ -1,5 +1,7 @@
 package ru.kpfu.telegrambot.dictionarybot.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kpfu.telegrambot.dictionarybot.entity.User;
@@ -10,6 +12,8 @@ import ru.kpfu.telegrambot.dictionarybot.state.State;
 
 @Service
 public class TelegramBotServiceImpl implements TelegramBotService {
+
+	private final static Logger LOG = LoggerFactory.getLogger(TelegramBotServiceImpl.class);
 
 	@Autowired
 	private TelegramResponseService responseService;
@@ -25,9 +29,13 @@ public class TelegramBotServiceImpl implements TelegramBotService {
 		if (isSlashCommand(text)) {
 			response = responseService.getSlashCommandResponse(chatId, text);
 		} else {
-			User user = userRepo.getOne(chatId);
+			User user;
+			if (userRepo.existsById(chatId)) {
+				LOG.debug("Getting user from db by chatId = {}", chatId);
+				user = userRepo.getOne(chatId);
+			} else {
+				LOG.debug("New user with chatId = {}", chatId);
 
-			if (user == null) {
 				user = new User(chatId, State.DICTIONARY);
 				userRepo.save(user);
 			}
