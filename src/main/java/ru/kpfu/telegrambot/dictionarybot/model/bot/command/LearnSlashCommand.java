@@ -29,7 +29,7 @@ public class LearnSlashCommand implements TelegramSlashCommand {
 
 			return TelegramMethodBuilder.sendMessage()
 					.setChatId(chatId)
-					.setText("Choise correct definition of " + word)
+					.setText("Choise correct definition of " + word.getWord())
 					.setReplyMarkup()
 					.setOneTimeKeyboard(true)
 					.setResizeKeyboard(true)

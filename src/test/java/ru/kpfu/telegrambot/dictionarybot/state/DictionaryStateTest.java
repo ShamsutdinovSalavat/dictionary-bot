@@ -40,6 +40,11 @@ public class DictionaryStateTest {
 					public String getDefinition() {
 						return "unable to see";
 					}
+
+					@Override
+					public String getWord() {
+						return "blind";
+					}
 				});
 
 		SendMessageMethod response =

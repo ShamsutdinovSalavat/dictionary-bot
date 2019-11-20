@@ -17,6 +17,11 @@ public class WordsApiResponse extends DictionaryResponse {
 		return results.get(0).getDefinition();
 	}
 
+	@Override
+	public String getWord() {
+		return word;
+	}
+
 	public void setWord(String word) {
 		this.word = word;
 	}
