@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReplyKeyboardMarkup {
 
-	private final List<KeyboardButton> keyboard;
+	private final List<List<KeyboardButton>> keyboard;
 
 	@JsonProperty(value = "resize_keyboard")
 	private final boolean resizeKeyboard;
@@ -17,13 +18,13 @@ public class ReplyKeyboardMarkup {
 	@JsonProperty(value = "one_time_keyboard")
 	private final boolean oneTimeKeyboard;
 
-	private ReplyKeyboardMarkup(List<KeyboardButton> keyboard, boolean resizeKeyboard, boolean oneTimeKeyboard) {
+	private ReplyKeyboardMarkup(List<List<KeyboardButton>> keyboard, boolean resizeKeyboard, boolean oneTimeKeyboard) {
 		this.keyboard = keyboard;
 		this.resizeKeyboard = resizeKeyboard;
 		this.oneTimeKeyboard = oneTimeKeyboard;
 	}
 
-	public List<KeyboardButton> getKeyboard() {
+	public List<List<KeyboardButton>> getKeyboard() {
 		return keyboard;
 	}
 
@@ -67,7 +68,7 @@ public class ReplyKeyboardMarkup {
 		}
 
 		public SendMessageMethod.SendMessageMethodBuilder build() {
-			ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(keyboard, resizeKeyboard, oneTimeKeyboard);
+			ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(Arrays.asList(keyboard), resizeKeyboard, oneTimeKeyboard);
 			this.builder.setReplyMarkup(keyboardMarkup);
 			return this.builder;
 		}
