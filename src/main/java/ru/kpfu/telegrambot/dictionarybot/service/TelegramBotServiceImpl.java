@@ -26,24 +26,29 @@ public class TelegramBotServiceImpl implements TelegramBotService {
 		Integer chatId = update.getMessage().getChat().getId();
 		TelegramResponse response;
 
+		User user = retrieveUserIfExistElseSave(chatId);
 		if (isSlashCommand(text)) {
 			response = responseService.getSlashCommandResponse(chatId, text);
 		} else {
-			User user;
-			if (userRepo.existsById(chatId)) {
-				LOG.debug("Getting user from db by chatId = {}", chatId);
-				user = userRepo.getOne(chatId);
-			} else {
-				LOG.debug("New user with chatId = {}", chatId);
-
-				user = new User(chatId, State.DICTIONARY);
-				userRepo.save(user);
-			}
-
 			response = responseService.getStateResponse(chatId, text, user.getState());
 		}
 
 		return response;
+	}
+
+	private User retrieveUserIfExistElseSave(Integer chatId) {
+		User user;
+		if (userRepo.existsById(chatId)) {
+			LOG.debug("Getting user from db by chatId = {}", chatId);
+			user = userRepo.getOne(chatId);
+		} else {
+			LOG.debug("New user with chatId = {}", chatId);
+
+			user = new User(chatId, State.DICTIONARY);
+			userRepo.save(user);
+		}
+
+		return user;
 	}
 
 
