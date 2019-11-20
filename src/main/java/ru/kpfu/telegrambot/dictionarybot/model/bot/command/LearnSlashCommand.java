@@ -1,5 +1,6 @@
 package ru.kpfu.telegrambot.dictionarybot.model.bot.command;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kpfu.telegrambot.dictionarybot.entity.User;
 import ru.kpfu.telegrambot.dictionarybot.entity.Word;
@@ -15,6 +16,7 @@ import java.util.Random;
 @Component
 public class LearnSlashCommand implements TelegramSlashCommand {
 
+	@Autowired
 	private UserRepository userRepository;
 
 	@Override
