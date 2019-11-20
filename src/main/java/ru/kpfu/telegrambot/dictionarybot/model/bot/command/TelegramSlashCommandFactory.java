@@ -7,10 +7,14 @@ public class TelegramSlashCommandFactory {
 
 	private StartSlashCommand startSlashCommand;
 	private HelpSlashCommand helpSlashCommand;
+	private LearnSlashCommand learnSlashCommand;
 
-	public TelegramSlashCommandFactory(StartSlashCommand startSlashCommand, HelpSlashCommand helpSlashCommand) {
+	public TelegramSlashCommandFactory(StartSlashCommand startSlashCommand,
+	                                   HelpSlashCommand helpSlashCommand,
+	                                   LearnSlashCommand learnSlashCommand) {
 		this.startSlashCommand = startSlashCommand;
 		this.helpSlashCommand = helpSlashCommand;
+		this.learnSlashCommand = learnSlashCommand;
 	}
 
 	public TelegramSlashCommand getSlashCommand(SlashCommand command) {
@@ -19,6 +23,8 @@ public class TelegramSlashCommandFactory {
 				return startSlashCommand;
 			case HELP:
 				return helpSlashCommand;
+			case LEARN:
+				return learnSlashCommand;
 			default:
 				return null;
 		}

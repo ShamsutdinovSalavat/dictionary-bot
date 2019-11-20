@@ -19,10 +19,14 @@ public class SendMessageMethod extends TelegramResponse {
 	@JsonProperty("parse_mode")
 	private final String parseMode;
 
-	private SendMessageMethod(Integer chatId, String text, String parseMode) {
+	@JsonProperty("reply_markup")
+	private final ReplyKeyboardMarkup replyMarkup;
+
+	private SendMessageMethod(Integer chatId, String text, String parseMode, ReplyKeyboardMarkup replyMarkup) {
 		this.chatId = chatId;
 		this.text = text;
 		this.parseMode = parseMode;
+		this.replyMarkup = replyMarkup;
 	}
 
 	@Override
@@ -42,11 +46,25 @@ public class SendMessageMethod extends TelegramResponse {
 		return parseMode;
 	}
 
+	public ReplyKeyboardMarkup getReplyMarkup() {
+		return replyMarkup;
+	}
+
 	public static class SendMessageMethodBuilder {
 
 		private Integer chatId;
 		private String text;
 		private String parseMode;
+		private ReplyKeyboardMarkup replyMarkup;
+
+		public ReplyKeyboardMarkup.ReplyKeyboardMarkupBuilder setReplyMarkup() {
+			return new ReplyKeyboardMarkup.ReplyKeyboardMarkupBuilder(this);
+		}
+
+		public SendMessageMethodBuilder setReplyMarkup(ReplyKeyboardMarkup replyMarkup) {
+			this.replyMarkup = replyMarkup;
+			return this;
+		}
 
 		public SendMessageMethod.SendMessageMethodBuilder setChatId(Integer chatId) {
 			this.chatId = chatId;
@@ -64,7 +82,7 @@ public class SendMessageMethod extends TelegramResponse {
 		}
 
 		public SendMessageMethod build() {
-			return new SendMessageMethod(chatId, text, parseMode);
+			return new SendMessageMethod(chatId, text, parseMode, replyMarkup);
 		}
 	}
 }
