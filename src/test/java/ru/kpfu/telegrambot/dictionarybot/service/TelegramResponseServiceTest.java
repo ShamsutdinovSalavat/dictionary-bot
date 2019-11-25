@@ -1,4 +1,4 @@
-package ru.kpfu.telegrambot.dictionarybot;
+package ru.kpfu.telegrambot.dictionarybot.service;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +10,6 @@ import ru.kpfu.telegrambot.dictionarybot.model.bot.command.SlashCommand;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.command.TelegramSlashCommandFactory;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.SendMessageMethod;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
-import ru.kpfu.telegrambot.dictionarybot.service.TelegramResponseServiceImpl;
 import ru.kpfu.telegrambot.dictionarybot.state.State;
 import ru.kpfu.telegrambot.dictionarybot.state.StateFactory;
 

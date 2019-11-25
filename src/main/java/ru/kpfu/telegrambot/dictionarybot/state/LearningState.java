@@ -8,7 +8,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.TelegramMessage;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.KeyboardButton;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
-import ru.kpfu.telegrambot.dictionarybot.repository.UserRepository;
+import ru.kpfu.telegrambot.dictionarybot.service.UserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,13 +18,14 @@ import java.util.stream.Stream;
 public class LearningState implements BotState {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
+
 	private Map<Integer, String> answers = new HashMap<>();
 
 
 	@Override
 	public TelegramResponse getResponse(Integer chatId, String messageText) {
-		User user = userRepository.getOne(chatId);
+		User user = userService.retrieveUserIfExistElseSave(chatId);
 		if (!answers.containsKey(chatId) || answers.get(chatId) == null) {
 			List<Word> words = user.getWords();
 			if (!words.isEmpty()) {

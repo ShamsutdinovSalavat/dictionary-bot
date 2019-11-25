@@ -1,28 +1,23 @@
 package ru.kpfu.telegrambot.dictionarybot.model.bot.command;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.kpfu.telegrambot.dictionarybot.entity.User;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
-import ru.kpfu.telegrambot.dictionarybot.repository.UserRepository;
+import ru.kpfu.telegrambot.dictionarybot.service.UserService;
 import ru.kpfu.telegrambot.dictionarybot.state.State;
 import ru.kpfu.telegrambot.dictionarybot.state.StateFactory;
 
 @Component
 public class LearnSlashCommand implements TelegramSlashCommand {
 
+	@Autowired
 	private StateFactory stateFactory;
-	private UserRepository userRepository;
-
-	public LearnSlashCommand(StateFactory stateFactory, UserRepository userRepository) {
-		this.stateFactory = stateFactory;
-		this.userRepository = userRepository;
-	}
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public TelegramResponse processCommand(Integer chatId) {
-		User user = userRepository.getOne(chatId);
-		user.setState(State.LEARN.name());
-		userRepository.save(user);
+		userService.changeState(chatId, State.LEARN);
 
 		return stateFactory.getState(State.LEARN).getResponse(chatId, null);
 	}
