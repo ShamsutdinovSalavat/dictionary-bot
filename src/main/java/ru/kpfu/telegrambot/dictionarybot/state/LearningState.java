@@ -10,10 +10,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.bot.method.KeyboardButton;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.repository.UserRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,10 +31,11 @@ public class LearningState implements BotState {
 				List<Integer> rands = listOfRands(words.size());
 				Word mainWord = words.get(rands.get(0));
 
-				List<KeyboardButton> keyboardButtons = rands.stream()
+				List<List<KeyboardButton>> keyboardButtons = rands.stream()
 						.map(i -> words.get(i))
 						.map(Word::getDefinition)
 						.map(KeyboardButton::new)
+						.map(Arrays::asList)
 						.collect(Collectors.toList());
 
 				answers.put(chatId, mainWord.getDefinition());
@@ -83,13 +81,13 @@ public class LearningState implements BotState {
 				.build();
 	}
 
-	private TelegramResponse response(Integer chatId, String word, List<KeyboardButton> buttons) {
+	private TelegramResponse response(Integer chatId, String word, List<List<KeyboardButton>> buttons) {
 		return TelegramMethodBuilder.sendMessage()
 				.setChatId(chatId)
 				.setText("Choose correct definition of \"" + word + "\"")
 				.setReplyMarkup()
 				.setOneTimeKeyboard(true)
-				.setResizeKeyboard(true)
+				.setResizeKeyboard(false)
 				.setKeyboard(buttons)
 				.build()
 				.build();
