@@ -26,7 +26,8 @@ public class LearningState implements BotState {
 	@Override
 	public TelegramResponse getResponse(Integer chatId, String messageText) {
 		User user = userService.retrieveUserIfExistElseSave(chatId);
-		if (!answers.containsKey(chatId) || answers.get(chatId) == null) {
+		TelegramResponse response = null;
+		if (isNotExistAnswer(chatId)) {
 			List<Word> words = user.getWords();
 			if (!words.isEmpty()) {
 				List<Integer> rands = listOfRands(words.size());
@@ -42,23 +43,25 @@ public class LearningState implements BotState {
 				answers.put(chatId, mainWord.getDefinition());
 				userService.changeState(user.getChatId(), State.DICTIONARY);
 
-				return responseWithKeyboard(chatId, mainWord.getWord(), keyboardButtons);
+				response = responseWithKeyboard(chatId, mainWord.getWord(), keyboardButtons);
 			} else {
-				return errorResponse(chatId, TelegramMessage.WORDS_IS_EMPTY_MESSAGE);
+				response = errorResponse(chatId, TelegramMessage.WORDS_IS_EMPTY_MESSAGE);
 			}
 
 		} else {
-			String answer = answers.get(chatId);
-			TelegramResponse response;
-			if (answer.equals(messageText)) {
+			if (answers.get(chatId).equals(messageText)) {
 				response = messageResponse(chatId, "Correct!");
 			} else {
 				response = messageResponse(chatId, "Incorrect!");
 			}
 			answers.replace(chatId, null);
-
-			return response;
 		}
+
+		return response;
+	}
+
+	private boolean isNotExistAnswer(Integer chatId) {
+		return !answers.containsKey(chatId) || answers.get(chatId) == null;
 	}
 
 	private List<Integer> listOfRands(int range) {
