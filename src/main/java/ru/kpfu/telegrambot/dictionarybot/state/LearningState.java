@@ -7,12 +7,13 @@ import ru.kpfu.telegrambot.dictionarybot.entity.Word;
 import ru.kpfu.telegrambot.dictionarybot.model.TelegramMessage;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.KeyboardButton;
-import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.service.UserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static ru.kpfu.telegrambot.dictionarybot.utils.ResponseUtils.*;
 
 @Component
 public class LearningState implements BotState {
@@ -21,7 +22,6 @@ public class LearningState implements BotState {
 	private UserService userService;
 
 	private Map<Integer, String> answers = new HashMap<>();
-
 
 	@Override
 	public TelegramResponse getResponse(Integer chatId, String messageText) {
@@ -40,20 +40,20 @@ public class LearningState implements BotState {
 						.collect(Collectors.toList());
 
 				answers.put(chatId, mainWord.getDefinition());
+				userService.changeState(user.getChatId(), State.DICTIONARY);
 
-				return response(chatId, mainWord.getWord(), keyboardButtons);
+				return responseWithKeyboard(chatId, mainWord.getWord(), keyboardButtons);
 			} else {
-				return errorResponse(chatId);
+				return errorResponse(chatId, TelegramMessage.WORDS_IS_EMPTY_MESSAGE);
 			}
 
 		} else {
 			String answer = answers.get(chatId);
 			TelegramResponse response;
 			if (answer.equals(messageText)) {
-				response = correctAnswer(chatId);
-
+				response = messageResponse(chatId, "Correct!");
 			} else {
-				response = incorrectAnswer(chatId);
+				response = messageResponse(chatId, "Incorrect!");
 			}
 			answers.replace(chatId, null);
 
@@ -68,36 +68,5 @@ public class LearningState implements BotState {
 				.collect(Collectors.toList());
 	}
 
-	private TelegramResponse correctAnswer(Integer chatId) {
-		return TelegramMethodBuilder.sendMessage()
-				.setChatId(chatId)
-				.setText("Correct!")
-				.build();
-	}
 
-	private TelegramResponse incorrectAnswer(Integer chatId) {
-		return TelegramMethodBuilder.sendMessage()
-				.setChatId(chatId)
-				.setText("Incorrect!")
-				.build();
-	}
-
-	private TelegramResponse response(Integer chatId, String word, List<List<KeyboardButton>> buttons) {
-		return TelegramMethodBuilder.sendMessage()
-				.setChatId(chatId)
-				.setText("Choose correct definition of \"" + word + "\"")
-				.setReplyMarkup()
-				.setOneTimeKeyboard(true)
-				.setResizeKeyboard(false)
-				.setKeyboard(buttons)
-				.build()
-				.build();
-	}
-
-	private TelegramResponse errorResponse(Integer chatId) {
-		return TelegramMethodBuilder.sendMessage()
-				.setChatId(chatId)
-				.setText(TelegramMessage.WORDS_IS_EMPTY_MESSAGE.message())
-				.build();
-	}
 }

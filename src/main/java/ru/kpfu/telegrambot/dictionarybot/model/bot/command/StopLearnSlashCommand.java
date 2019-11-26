@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kpfu.telegrambot.dictionarybot.entity.User;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
-import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.repository.UserRepository;
 import ru.kpfu.telegrambot.dictionarybot.state.State;
+import ru.kpfu.telegrambot.dictionarybot.utils.ResponseUtils;
 
 @Component
 public class StopLearnSlashCommand implements TelegramSlashCommand {
@@ -20,9 +20,6 @@ public class StopLearnSlashCommand implements TelegramSlashCommand {
 		user.setState(State.DICTIONARY.name());
 
 		userRepository.save(user);
-		return TelegramMethodBuilder.sendMessage()
-				.setChatId(chatId)
-				.setText("Learning has been stopped!")
-				.build();
+		return ResponseUtils.messageResponse(chatId, "Learning has been stopped!");
 	}
 }

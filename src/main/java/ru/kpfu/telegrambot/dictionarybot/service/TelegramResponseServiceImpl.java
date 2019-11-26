@@ -8,11 +8,12 @@ import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.command.SlashCommand;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.command.TelegramSlashCommandFactory;
-import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
 import ru.kpfu.telegrambot.dictionarybot.state.State;
 import ru.kpfu.telegrambot.dictionarybot.state.StateFactory;
 
 import java.util.Arrays;
+
+import static ru.kpfu.telegrambot.dictionarybot.utils.ResponseUtils.errorResponse;
 
 
 @Service
@@ -60,16 +61,9 @@ public class TelegramResponseServiceImpl implements TelegramResponseService {
 					.getSlashCommand(SlashCommand.valueOf(slashCommand))
 					.processCommand(chatId);
 		} else {
-			response = errorResponse(chatId);
+			response = errorResponse(chatId, TelegramMessage.INCORRECT_WORD_MESSAGE);
 		}
 		return response;
-	}
-
-	private TelegramResponse errorResponse(Integer chatId) {
-		return TelegramMethodBuilder.sendMessage()
-				.setChatId(chatId)
-				.setText(TelegramMessage.INCORRECT_WORD_MESSAGE.message())
-				.build();
 	}
 
 	private boolean isExist(String slashCommand) {
