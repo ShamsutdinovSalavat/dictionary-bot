@@ -41,7 +41,6 @@ public class LearningState implements BotState {
 						.collect(Collectors.toList());
 
 				answers.put(chatId, mainWord.getDefinition());
-				userService.changeState(user.getChatId(), State.DICTIONARY);
 
 				response = responseWithKeyboard(chatId, mainWord.getWord(), keyboardButtons);
 			} else {
@@ -55,6 +54,7 @@ public class LearningState implements BotState {
 				response = messageResponse(chatId, "Incorrect!");
 			}
 			answers.replace(chatId, null);
+			userService.changeState(user.getChatId(), State.DICTIONARY);
 		}
 
 		return response;
