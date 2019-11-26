@@ -10,6 +10,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.TelegramMessage;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.SendMessageMethod;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 import ru.kpfu.telegrambot.dictionarybot.service.DictionaryService;
+import ru.kpfu.telegrambot.dictionarybot.service.UserService;
 
 import static org.mockito.Mockito.when;
 
@@ -18,6 +19,8 @@ public class DictionaryStateTest {
 
 	@Mock
 	private DictionaryService dictionaryService;
+	@Mock
+	private UserService userService;
 	@InjectMocks
 	private DictionaryState dictionaryState;
 

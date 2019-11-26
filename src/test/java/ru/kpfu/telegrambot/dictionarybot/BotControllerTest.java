@@ -12,8 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
-import ru.kpfu.telegrambot.dictionarybot.repository.UserRepository;
-import ru.kpfu.telegrambot.dictionarybot.service.TelegramBotService;
+import ru.kpfu.telegrambot.dictionarybot.service.TelegramResponseService;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Mockito.when;
@@ -29,9 +28,7 @@ public class BotControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private TelegramBotService service;
-	@MockBean
-	private UserRepository userRepository;
+	private TelegramResponseService service;
 
 	private String json;
 	private Update update;

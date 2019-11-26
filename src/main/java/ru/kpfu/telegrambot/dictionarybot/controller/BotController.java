@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.telegrambot.dictionarybot.exception.RestException;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.Update;
-import ru.kpfu.telegrambot.dictionarybot.service.TelegramBotService;
+import ru.kpfu.telegrambot.dictionarybot.service.TelegramResponseService;
 
 @RestController
 @RequestMapping(
@@ -23,7 +23,7 @@ public class BotController {
 	private static final Logger LOG = LoggerFactory.getLogger(BotController.class);
 
 	@Autowired
-	private TelegramBotService botService;
+	private TelegramResponseService responseService;
 
 
 	@PostMapping
@@ -35,7 +35,7 @@ public class BotController {
 		}
 
 		try {
-			TelegramResponse response = botService.onUpdate(update);
+			TelegramResponse response = responseService.onUpdate(update);
 			return ResponseEntity.ok(response);
 
 		} catch (Exception ex) {
