@@ -24,6 +24,11 @@ public class LinguaRobotResponse extends DictionaryResponse {
 	}
 
 	@Override
+	public String getWord() {
+		return entry.get(0).getEntry();
+	}
+
+	@Override
 	public String toString() {
 		return "LinguaRobotResponse{" +
 				"entry=" + entry +

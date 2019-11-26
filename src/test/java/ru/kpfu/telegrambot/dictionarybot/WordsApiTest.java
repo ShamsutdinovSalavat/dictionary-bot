@@ -12,13 +12,14 @@ import ru.kpfu.telegrambot.dictionarybot.dictionary.WordsApiDictionaryApi;
 import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DictionaryBotApplication.class)
 @SpringBootTest(args = {"--wordsapi.key=1234"})
 public class WordsApiTest {
 
 	@Autowired
-	@Qualifier("wordsApi")
+	@Qualifier("wordsApiDictionaryApi")
 	private WordsApiDictionaryApi api;
 
 	@Test
