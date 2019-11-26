@@ -13,16 +13,17 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import ru.kpfu.telegrambot.dictionarybot.exception.WordNotFoundException;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
-import ru.kpfu.telegrambot.dictionarybot.model.dictionary.wordsapi.WordsApiResponse;
+import ru.kpfu.telegrambot.dictionarybot.model.dictionary.linguaRobot.LinguaRobotResponse;
 
 import javax.annotation.PostConstruct;
 
-@Component("wordsApi")
-public class WordsApiDictionaryApi implements DictionaryApi {
+@Component("api1")
+public class LinguaRobotDictionaryApi implements DictionaryApi {
 
-	private static final String URL = "https://wordsapiv1.p.rapidapi.com";
-	private static final String WORDS_METHOD = URL + "/words/{word}";
-	private static final Logger log = LoggerFactory.getLogger(WordsApiDictionaryApi.class);
+	private static final String URL = "https://api.linguarobot.io/language/v1/entries/en";
+	private static final String WORDS_METHOD = URL + "/{word}";
+	private static final Logger log = LoggerFactory.getLogger(LinguaRobotDictionaryApi.class);
+
 	@Value("${wordsapi.key}")
 	private String key;
 
@@ -43,20 +44,25 @@ public class WordsApiDictionaryApi implements DictionaryApi {
 
 	@Override
 	public DictionaryResponse getResponseWithDefinition(String word) throws WordNotFoundException {
-		HttpEntity<WordsApiResponse> httpEntity = new HttpEntity<>(headers);
+		HttpEntity<LinguaRobotResponse> httpEntity = new HttpEntity<>(headers);
 		log.debug("Performing request on {}, word = {}", WORDS_METHOD, word);
 
 		try {
-			ResponseEntity<WordsApiResponse> response = restTemplate.exchange(
+			ResponseEntity<LinguaRobotResponse> response = restTemplate.exchange(
 					WORDS_METHOD,
 					HttpMethod.GET,
 					httpEntity,
-					WordsApiResponse.class,
+					LinguaRobotResponse.class,
 					word
 			);
 
 			log.debug("Response: HttpStatusCode = {}, body = {}", response.getStatusCode(), response.getBody());
-			return response.getBody();
+			LinguaRobotResponse respBody = response.getBody();
+
+			if (respBody.getEntry().isEmpty()) {
+				throw new WordNotFoundException("the word is not found");
+			}
+			return respBody;
 		} catch (RestClientException e) {
 			throw new WordNotFoundException(e);
 		}
