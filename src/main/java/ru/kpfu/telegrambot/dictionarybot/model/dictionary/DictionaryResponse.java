@@ -7,4 +7,6 @@ public abstract class DictionaryResponse {
 	public abstract String getWord();
 
 	public abstract String getDescription();
+
+	public abstract String getAudioUrl();
 }

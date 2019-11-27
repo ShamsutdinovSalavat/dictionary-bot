@@ -4,6 +4,7 @@ import ru.kpfu.telegrambot.dictionarybot.model.TelegramMessage;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.TelegramResponse;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.KeyboardButton;
 import ru.kpfu.telegrambot.dictionarybot.model.bot.method.TelegramMethodBuilder;
+import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
 
 import java.util.List;
 
@@ -13,6 +14,16 @@ public class ResponseUtils {
 		return TelegramMethodBuilder.sendMessage()
 				.setChatId(chatId)
 				.setText(message)
+				.build();
+	}
+
+	public static TelegramResponse audioResponse(Integer chatId, DictionaryResponse dictionaryResponse) {
+		return TelegramMethodBuilder.sendAudio()
+				.setChatId(chatId)
+				.setAudio(dictionaryResponse.getAudioUrl())
+				.setCaption(dictionaryResponse.getDescription())
+				.setParseMode("markdown")
+				.setTitle("pronunciation")
 				.build();
 	}
 

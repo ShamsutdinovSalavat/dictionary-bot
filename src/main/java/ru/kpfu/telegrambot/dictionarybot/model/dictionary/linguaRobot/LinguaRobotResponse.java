@@ -20,12 +20,22 @@ public class LinguaRobotResponse extends DictionaryResponse {
 
 	@Override
 	public String getDefinition() {
-		return entry.get(0).getLexemes().get(0).getSenses().get(0).getDefinition();
+		return entry.get(0)
+				.getLexemes().get(0)
+				.getSenses().get(0)
+				.getDefinition();
 	}
 
 	@Override
 	public String getDescription() {
 		return ResponseMessageFormatter.format(this);
+	}
+
+	@Override
+	public String getAudioUrl() {
+		return this.entry.get(0)
+				.getPronunciations().get(0)
+				.getAudio().getUrl();
 	}
 
 	@Override

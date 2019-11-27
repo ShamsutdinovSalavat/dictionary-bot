@@ -27,6 +27,11 @@ public class WordsApiResponse extends DictionaryResponse {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public String getAudioUrl() {
+		throw new UnsupportedOperationException();
+	}
+
 	public void setWord(String word) {
 		this.word = word;
 	}
