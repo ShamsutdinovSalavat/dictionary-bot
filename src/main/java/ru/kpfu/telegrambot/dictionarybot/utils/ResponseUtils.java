@@ -14,6 +14,7 @@ public class ResponseUtils {
 		return TelegramMethodBuilder.sendMessage()
 				.setChatId(chatId)
 				.setText(message)
+				.setParseMode("markdown")
 				.build();
 	}
 

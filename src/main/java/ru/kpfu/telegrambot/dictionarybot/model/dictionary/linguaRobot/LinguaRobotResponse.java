@@ -33,9 +33,19 @@ public class LinguaRobotResponse extends DictionaryResponse {
 
 	@Override
 	public String getAudioUrl() {
-		return this.entry.get(0)
-				.getPronunciations().get(0)
-				.getAudio().getUrl();
+		String resultUrl = "";
+
+		Entry entry = this.entry.get(0);
+		List<Pronunciation> pronunciations = entry.getPronunciations();
+		if (pronunciations != null) {
+			Pronunciation pronunciation = pronunciations.get(0);
+			Audio audio = pronunciation.getAudio();
+			if (audio != null) {
+				resultUrl = audio.getUrl();
+			}
+		}
+
+		return resultUrl;
 	}
 
 	@Override
