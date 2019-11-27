@@ -39,8 +39,7 @@ public class LearningState implements BotState {
 						.map(KeyboardButton::new)
 						.map(Arrays::asList)
 						.collect(Collectors.toList());
-
-				answers.put(chatId, mainWord.getDefinition());
+				answers.put(chatId, mainWord.getDefinition().toLowerCase());
 
 				response = responseWithKeyboard(chatId, mainWord.getWord(), keyboardButtons);
 			} else {
