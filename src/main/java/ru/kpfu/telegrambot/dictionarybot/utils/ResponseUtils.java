@@ -22,9 +22,6 @@ public class ResponseUtils {
 		return TelegramMethodBuilder.sendAudio()
 				.setChatId(chatId)
 				.setAudio(dictionaryResponse.getAudioUrl())
-				.setCaption(dictionaryResponse.getDescription())
-				.setParseMode("markdown")
-				.setTitle("pronunciation")
 				.build();
 	}
 
