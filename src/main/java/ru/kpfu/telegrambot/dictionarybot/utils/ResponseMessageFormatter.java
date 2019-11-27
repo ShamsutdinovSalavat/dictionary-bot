@@ -42,11 +42,13 @@ public class ResponseMessageFormatter {
 	private static String transcription(LinguaRobotResponse res) {
 		Entry entry = res.getEntry().get(0);
 		List<Pronunciation> pronunciations = entry.getPronunciations();
-		for (Pronunciation pronunciation : pronunciations) {
-			List<Transcription> transcriptions = pronunciation.getTranscriptions();
-			if (transcriptions != null) {
-				Transcription transcription = transcriptions.get(0);
-				return transcription.getTranscription();
+		if (pronunciations != null) {
+			for (Pronunciation pronunciation : pronunciations) {
+				List<Transcription> transcriptions = pronunciation.getTranscriptions();
+				if (transcriptions != null) {
+					Transcription transcription = transcriptions.get(0);
+					return transcription.getTranscription();
+				}
 			}
 		}
 		return "";
