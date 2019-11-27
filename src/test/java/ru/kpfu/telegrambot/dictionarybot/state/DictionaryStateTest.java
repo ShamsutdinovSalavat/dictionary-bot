@@ -48,6 +48,16 @@ public class DictionaryStateTest {
 					public String getWord() {
 						return "blind";
 					}
+
+					@Override
+					public String getDescription() {
+						return null;
+					}
+
+					@Override
+					public String getAudioUrl() {
+						return null;
+					}
 				});
 
 		SendMessageMethod response =
