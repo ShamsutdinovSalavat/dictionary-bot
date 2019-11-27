@@ -22,6 +22,11 @@ public class WordsApiResponse extends DictionaryResponse {
 		return word;
 	}
 
+	@Override
+	public String getDescription() {
+		throw new UnsupportedOperationException();
+	}
+
 	public void setWord(String word) {
 		this.word = word;
 	}

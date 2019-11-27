@@ -2,6 +2,7 @@ package ru.kpfu.telegrambot.dictionarybot.model.dictionary.linguaRobot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.kpfu.telegrambot.dictionarybot.model.dictionary.DictionaryResponse;
+import ru.kpfu.telegrambot.dictionarybot.utils.ResponseMessageFormatter;
 
 import java.util.List;
 
@@ -19,8 +20,12 @@ public class LinguaRobotResponse extends DictionaryResponse {
 
 	@Override
 	public String getDefinition() {
-
 		return entry.get(0).getLexemes().get(0).getSenses().get(0).getDefinition();
+	}
+
+	@Override
+	public String getDescription() {
+		return ResponseMessageFormatter.format(this);
 	}
 
 	@Override

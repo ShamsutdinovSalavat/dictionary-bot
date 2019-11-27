@@ -15,7 +15,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 	private static final Logger LOG = LoggerFactory.getLogger(DictionaryServiceImpl.class);
 
 	@Autowired
-	@Qualifier("wordsApiDictionaryApi")
+	@Qualifier("linguaRobotDictionaryApi")
 	private DictionaryApi dictionaryApi;
 
 	@Override

@@ -28,7 +28,7 @@ public class DictionaryState implements BotState {
 		DictionaryResponse dictionaryResponse = dictionaryService.getResponseWithDescription(messageText);
 
 		if (dictionaryResponse != null) {
-			response = messageResponse(chatId, dictionaryResponse.getDefinition());
+			response = messageResponse(chatId, dictionaryResponse.getDescription());
 			userService.addWord(chatId, new Word(dictionaryResponse.getWord(), dictionaryResponse.getDefinition()));
 		} else {
 			response = errorResponse(chatId, TelegramMessage.INCORRECT_WORD_MESSAGE);
