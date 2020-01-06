@@ -1,15 +1,12 @@
+Description:
+
+    Telegram bot on Spring Boot. Bot is a en-en dictionary. 
+    Bot is available on Telegram by id @CoolDictionaryBot  
+
 Features:
 
     1) En-En dictionary
-    2) En-Ru, Ru-En dictionary
-    3) Contest use of the word, idioms, antonyms, synonims
-    4) Output audio pronunciation track
-    5) Learning function at a user's request
-    6) Daily learning fucntion
+    2) Contest use of the word, idioms, antonyms, synonims
+    3) Output audio pronunciation track
+    4) Learning function at a user's request
     
-Issues:
-1) Get http 500 when telegram send update object
-2) Regexp pattern is't correct 
-3) problem with doing requests via RestTemplate when app is deployed on heroku
-4) RestClientException don't handle properly
-5) NPE at TelegramBotService 
